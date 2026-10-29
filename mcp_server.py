@@ -1,6 +1,7 @@
 """Local stdio MCP server exposing only StudyMate task tools."""
 from mcp.server.fastmcp import FastMCP
 from agent import add_task, list_tasks, search_tasks, delete_task
+from memory import remember, recall
 
 mcp = FastMCP("studymate-task-tools")
 
@@ -18,6 +19,17 @@ def list_study_tasks() -> dict:
 def search_study_tasks(query: str) -> dict:
     """Search task titles by keyword."""
     return search_tasks(query)
+
+@mcp.tool()
+def remember_study_context(text: str, category: str = "study") -> dict:
+    """Save study information to persistent memory."""
+    return remember(text, category)
+
+
+@mcp.tool()
+def recall_study_context(query: str) -> dict:
+    """Retrieve relevant information from saved memory."""
+    return recall(query)
 
 @mcp.tool()
 def request_task_deletion(task_id: str, confirmation: str = "") -> dict:
